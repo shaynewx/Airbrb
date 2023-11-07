@@ -1,0 +1,10 @@
+.submit-button {
+    background-color: #000;
+    border-radius: 4px;
+    cursor: p;
+}
+
+
+.cancel-button {
+    background-color: #fff;
+}

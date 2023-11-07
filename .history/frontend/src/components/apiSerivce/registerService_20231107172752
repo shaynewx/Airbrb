@@ -1,0 +1,18 @@
+// registerService.jsx
+import { message } from 'antd';
+import { postRequest } from './apiService'; // 假设apiService.jsx和registerService.jsx在同一目录下
+
+const registerUser = async (values, navigate) => {
+  const onSuccess = (data) => {
+    localStorage.setItem('token', data.token);
+    navigate('/dashboard');
+  };
+
+  const onError = (errorMessage) => {
+    message.error(errorMessage);
+  };
+
+  postRequest('/user/auth/register', values, onSuccess, onError);
+};
+
+export default registerUser;

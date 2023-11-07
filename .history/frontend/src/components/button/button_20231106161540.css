@@ -1,0 +1,21 @@
+.button {
+    background-color: beige;
+    hei
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 12px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.submit-button {
+    background-color: #000;
+    color: #fff;
+}
+
+
+.cancel-button {
+    background-color: #fff;
+    color: #000;
+}

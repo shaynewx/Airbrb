@@ -1,0 +1,27 @@
+.button {
+    background-color: beige;
+    height: 20px;
+    width: 60px;
+    border: #ccc 1px solid;
+    border-radius: 4px;
+    cursor: pointer;
+    display: inline-block;
+    font-size: 12px;
+    text-align: center;
+    text-decoration: none;
+}
+
+.button:hover {
+    background-color: #ccc;
+}
+
+.submit-button {
+    background-color: #000;
+    color: #fff;
+}
+
+
+.cancel-button {
+    background-color: #fff;
+    color: #000;
+}

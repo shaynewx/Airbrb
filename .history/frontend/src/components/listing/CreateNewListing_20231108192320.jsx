@@ -30,17 +30,13 @@ const CreateNewListing = () => {
     };
 
     console.log('Submitted Data:', dataToSubmit);
+  
 
     // Submit the data to the backend
     try {
       const response = await createNewListing(dataToSubmit);
-      console.log('Response:', response);
-
-      if (response && response.listingId) {
+      if (response.success) {
         message.success('Listing created successfully');
-        setThumbnailBase64('');
-        setImagesBase64([]);
-        form.resetFields();
         // TODO:Perform any additional actions on success (e.g., redirecting or clearing the form)
       } else {
         message.error(response.error || 'An error occurred while creating the listing');
@@ -49,6 +45,11 @@ const CreateNewListing = () => {
       message.error('An error occurred while creating the listing');
       console.error('There was an error with the request:', error);
     }
+
+    // Reset the base64 states and form after successful submission
+    setThumbnailBase64('');
+    setImagesBase64([]);
+    form.resetFields();
   };
 
   const handleOk = () => {

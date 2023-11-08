@@ -49,6 +49,11 @@ const CreateNewListing = () => {
       message.error('An error occurred while creating the listing');
       console.error('There was an error with the request:', error);
     }
+
+    // Reset the base64 states and form after successful submission
+    setThumbnailBase64('');
+    setImagesBase64([]);
+    form.resetFields();
   };
 
   const handleOk = () => {

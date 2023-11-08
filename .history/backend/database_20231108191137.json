@@ -1,0 +1,23 @@
+{
+  "users": {
+    "123@aa.com": {
+      "name": "Ann",
+      "password": "123456ab",
+      "sessionActive": true
+    },
+    "234@gmail.com": {
+      "name": "Mia",
+      "password": "223344er",
+      "sessionActive": true
+    },
+    "333@q.com": {
+      "name": "Eric",
+      "password": "123456cd",
+      "sessionActive": false
+    }
+  },
+  "listings": {
+
+  },
+  "bookings": {}
+}

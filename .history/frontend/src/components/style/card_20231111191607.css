@@ -1,0 +1,26 @@
+.cards-container {
+    display: flex;
+    flex-wrap: wrap; /* 允许卡片在容器宽度不足时换行 */
+    justify-content: space-around;
+    margin: 20px;
+  }
+
+.card-cover-img {
+  width: 100%; /* 使图片宽度与卡片宽度一致 */
+  height: 300px; /* 设置固定高度 */
+  object-fit: cover; /* 裁剪并保持图片的宽高比 */
+}
+  
+  /* 当屏幕宽度小于或等于600px时，适应手机端显示 */
+  @media (max-width: 600px) {
+    .cards-container {
+      flex-direction: column; /* 在手机屏幕上卡片垂直排列 */
+      align-items: center; /* 在手机屏幕上居中对齐卡片 */
+    }
+  
+    .cards-container .ant-card {
+      width: 100%; /* 在手机屏幕上卡片宽度为100% */
+      margin-bottom: 20px; /* 在卡片之间添加垂直间距 */
+    }
+  }
+  

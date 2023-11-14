@@ -8,7 +8,7 @@ const TimeSetForm = ({ form }) => {
       <Form.Item
         name="dateRange"
         label="Availability Date Range"
-        rules={[{ required: true, message: 'Please select the date range!' }]}
+        rules={[{ required: true, message: 'Please select the date range' }]}
       >
         <DatePicker.RangePicker />
       </Form.Item>

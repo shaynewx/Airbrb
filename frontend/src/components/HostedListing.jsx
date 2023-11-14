@@ -4,40 +4,41 @@ import Cards from './card/HostingCards';
 import { getListing, getListingById } from './form/apiService';
 import LogoutButton from './LogoutButton';
 import './style/card.css';
+import './style/style.css';
 
-// 获取房东的房源信息
+// get listing info from backend
 function HostedListing () {
   const [listings, setListings] = useState([]);
+  const fetchListings = async () => {
+    try {
+      const initialData = await getListing();
+      if (initialData && initialData.listings) {
+        const listingsDetails = await Promise.all(initialData.listings.map(async (listing) => {
+          const detailedData = await getListingById(listing.id);
+          return { ...detailedData, id: listing.id };
+        }));
+        setListings(listingsDetails);
+      }
+    } catch (error) {
+      console.error('Error fetching listings:', error);
+    }
+  };
 
   useEffect(() => {
-    const fetchListings = async () => {
-      try {
-        // 先获取所有房源的ID
-        const initialData = await getListing();
-        if (initialData && initialData.listings) {
-          // 对于每个ID，获取详细的房源信息
-          const listingsDetails = await Promise.all(initialData.listings.map(async (listing) => {
-            const detailedData = await getListingById(listing.id);
-            return { ...detailedData, id: listing.id }; // 确保每个房源详情都有id属性
-          }));
-          console.log('Listings with details:', listingsDetails); // 查看每个房源信息
-          setListings(listingsDetails); // 设置状态以包含所有详细信息
-        }
-      } catch (error) {
-        console.error('Error fetching listings:', error);
-      }
-    };
-
     fetchListings();
   }, []);
 
   return (
     <div>
       <h2>Hosted Listings</h2>
-      <CreateNewListing />
-      <LogoutButton />
+      <div className='welcome-container'>
+        <h4 className='Welcome'>Welcome! {localStorage.getItem('userId')}</h4>
+        <LogoutButton />
+      </div>
+      <CreateNewListing onListingCreated={fetchListings} />
       <div className='cards-container'>
       {listings.map((item) => {
+        // deconstruct nested listing objects
         const { listing } = item; // 解构出嵌套的 listing 对象
         return (
           <Cards

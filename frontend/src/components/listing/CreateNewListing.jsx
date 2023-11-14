@@ -1,9 +1,10 @@
+// CreateNewListing.jsx
 import React, { useState } from 'react';
 import { Button, Modal, Form, message } from 'antd';
 import FormDisabledDemo from './ListingForm';
 import { createNewListing } from '../form/apiService';
 
-const CreateNewListing = () => {
+const CreateNewListing = ({ onListingCreated }) => {
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [thumbnailBase64, setThumbnailBase64] = useState('');
   const [imagesBase64, setImagesBase64] = useState([]);
@@ -17,7 +18,6 @@ const CreateNewListing = () => {
     const { title, address, price, ...metadata } = values;
     delete metadata.thumbnail;
     delete metadata.images;
-    // 封装数据
     const dataToSubmit = {
       title,
       address,
@@ -29,18 +29,14 @@ const CreateNewListing = () => {
       }
     };
 
-    console.log('Submitted Data:', dataToSubmit);
-
-    // Submit the data to the backend
     try {
       const response = await createNewListing(dataToSubmit);
-      // console.log('Response:', response);
-
       if (response && response.listingId) {
         message.success('Listing created successfully');
         setThumbnailBase64('');
         setImagesBase64([]);
         form.resetFields();
+        onListingCreated(); // 调用传入的更新房源列表的函数
       } else {
         message.error(response.error || 'An error occurred while creating the listing');
       }
@@ -51,18 +47,13 @@ const CreateNewListing = () => {
   };
 
   const handleOk = () => {
-    form
-      .validateFields()
-      .then((values) => {
-        // If form data is valid, call apiPOST
-        apiPOST(values);
-        // Close modal
-        setIsModalOpen(false);
-      })
-      .catch((info) => {
-        console.error('Validate Failed:', info);
-        message.error('Form validation failed, please check the inputs.');
-      });
+    form.validateFields().then((values) => {
+      apiPOST(values);
+      setIsModalOpen(false);
+    }).catch((info) => {
+      console.error('Validate Failed:', info);
+      message.error('Form validation failed, please check the inputs.');
+    });
   };
 
   const handleCancel = () => {
@@ -74,17 +65,8 @@ const CreateNewListing = () => {
       <Button type="primary" onClick={showModal}>
         Create a New Listing
       </Button>
-      <Modal
-        title="Create a New Listing"
-        open={isModalOpen}
-        onOk={handleOk}
-        onCancel={handleCancel}
-      >
-        <FormDisabledDemo
-          form={form}
-          setThumbnailBase64={setThumbnailBase64}
-          setImagesBase64={setImagesBase64}
-        />
+      <Modal title="Create a New Listing" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>
+        <FormDisabledDemo form={form} setThumbnailBase64={setThumbnailBase64} setImagesBase64={setImagesBase64} />
       </Modal>
     </>
   );

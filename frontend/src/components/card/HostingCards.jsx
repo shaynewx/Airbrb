@@ -7,21 +7,21 @@ import { publishListing, deleteListing as deleteListingApi } from '../form/apiSe
 // 每个具体的卡片组件都会接收一个包含所有房源信息的对象作为props
 const Cards = ({ id, title, address, type, beds, bedrooms, bathrooms, amenities, thumbnail, reviews, price, images, owner, postedOn, published, availability }) => {
   console.log(
-    'id:', id,
-    //   'title:', title,
-    //   'address:', address,
-    //   'type:', type,
-    //   'beds:', beds,
-    //   'bedrooms:', bedrooms,
-    //   'bathrooms', bathrooms,
-    //   'amenities:', amenities,
-    //   'thumbnail:', thumbnail,
-    //   'reviews', reviews,
-    //   'price:', price,
+    // 'id:', id,
+    // 'title:', title,
+    // 'address:', address,
+    // 'type:', type,
+    //  'beds:', beds,
+    //  'bedrooms:', bedrooms,
+    //  'bathrooms', bathrooms,
+    //  'amenities:', amenities,
+    //  'thumbnail:', thumbnail,
+    //  'reviews', reviews,
+    //  'price:', price,
     'owner:', owner,
-    'post时间', postedOn,
-    '是否发布:', published,
-    '可用时间:', availability)
+    'post time', postedOn,
+    'publish:', published,
+    'availability:', availability)
   const navigate = useNavigate();
 
   // 检查当前登录用户是否是房源的房东,如果不是房东，不渲染这个房源卡片
@@ -111,7 +111,6 @@ const Cards = ({ id, title, address, type, beds, bedrooms, bathrooms, amenities,
     const success = await deleteListingApi(id);
     if (success) {
       message.success('Listing has been deleted successfully.');
-      // TODO:还需要更新列表状态，以移除已删除的房源，以及发布、编辑
     } else {
       message.error('Failed to delete listing.');
     }
@@ -149,7 +148,7 @@ const Cards = ({ id, title, address, type, beds, bedrooms, bathrooms, amenities,
       </Modal>
       <Modal
         title="Confirm Delete"
-        visible={isDeleteConfirmModalOpen}
+        open={isDeleteConfirmModalOpen}
         onOk={handleDeleteConfirm}
         onCancel={handleDeleteCancel}
         okText="Yes"

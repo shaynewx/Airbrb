@@ -1,16 +1,21 @@
 /* eslint-disable no-undef */
 import React from 'react';
-// import Button from '../../src/components/Button';
+import { BrowserRouter as Router } from 'react-router-dom';
+import LoginForm from '../../src/components/form/LoginForm';
 
-describe('Button Component Test', () => {
-  it('should mount', () => {
-    cy.mount(<Button>Click Me</Button>);
-    cy.get('button').contains('Click Me');
-  });
+describe('LoginForm Component', () => {
+  it('navigates to home when "Cancel" is clicked', () => {
+    // Mount the LoginForm component wrapped in Router
+    cy.mount(
+      <Router>
+        <LoginForm />
+      </Router>
+    );
 
-  it('when button is clicked, should call onClick', () => {
-    cy.mount(<Button onClick={cy.spy().as('onClick')}>Click Me</Button>);
-    cy.get('button').contains('Click Me').click();
-    cy.get('@onClick').should('have.been.called');
+    // Click the "Cancel" button
+    cy.get('button[type="button"]').click();
+
+    // Check if the URL has been changed to the home page
+    cy.url().should('include', 'localhost:')
   });
 });

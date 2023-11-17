@@ -3,3 +3,31 @@
     flex-direction: row;
     justify-content: right;
 }
+
+.filter-container {
+  display: flex;
+  flex-direction: column;
+  justify-content: right;
+  width: 330px;
+  border: 1px solid #ccc;
+  border-radius: 20px;
+  padding: 20px;
+  margin: 10px;
+  
+}
+
+.slider-container {
+  display: flex;
+  flex-direction: column;
+  margin-top: 20px;
+  margin-bottom: 10px;
+}
+
+
+.fixedWidth {
+    width: 300px !important;
+  }
+  
+  .fixedWidthSelect {
+    width: 120px !important;
+  }

@@ -7,7 +7,7 @@ import { updateListing } from '../form/apiService';
 const { TextArea } = Input;
 const { Option } = Select;
 
-// 用于将文件转换为 Base64 编码的函数
+// convert files to Base64 encoding
 const getBase64 = (file) => {
   return new Promise((resolve, reject) => {
     const reader = new FileReader();
@@ -22,14 +22,13 @@ const EditListing = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const { id } = useParams();
-  // 添加用于跟踪Base64编码的状态
+  // Add state for tracking Base64 encoding
   const [thumbnailBase64, setThumbnailBase64] = useState('');
   const [imagesBase64, setImagesBase64] = useState([]);
 
   useEffect(() => {
-    // 如果location.state存在，就使用它来设置表单的初始值
+    // If location.state exists, use it to set the form's initial value.
     if (location.state) {
-      // 假设 thumbnail 和 images 是 base64 字符串数组
       const isString = (value) => typeof value === 'string' || value instanceof String;
       const thumbnailFileList = location.state.thumbnail.map((base64, index) => ({
         uid: '-thumbnail-' + index,
@@ -37,13 +36,12 @@ const EditListing = () => {
         status: 'done',
         url: isString(base64) ? base64 : '', // Ensure the url is a string
       }));
-      // 确保 images 总是一个数组
       const imagesArray = Array.isArray(location.state.images) ? location.state.images : [];
       const imagesFileList = imagesArray.map((base64, index) => ({
         uid: '-image-' + index,
         name: 'image-' + index,
         status: 'done',
-        url: isString(base64) ? base64 : '', // 确保url是字符串
+        url: isString(base64) ? base64 : '',
       }));
 
       form.setFieldsValue({
@@ -61,16 +59,14 @@ const EditListing = () => {
     }
   }, [form, location.state]);
 
-  // 修改handleThumbnailChange和handleImagesChange函数以适应删除操作
+  // accommodate deletion operations
   const handleThumbnailChange = async ({ file, fileList }) => {
-    // 如果是删除操作，直接更新状态和表单值
     if (file.status === 'removed') {
-      setThumbnailBase64(''); // 清空缩略图Base64编码
+      setThumbnailBase64('');
       form.setFieldsValue({ thumbnail: [] });
       return;
     }
 
-    // 如果文件上传成功，转换为Base64
     if (file.status === 'done') {
       const base64 = await getBase64(file.originFileObj);
       setThumbnailBase64(base64);
@@ -80,21 +76,19 @@ const EditListing = () => {
   };
 
   const handleImagesChange = async ({ file, fileList }) => {
-    // 处理删除操作
     if (file.status === 'removed') {
-      // 更新Base64编码数组
       setImagesBase64(fileList.map(file => file.status === 'done' ? file.base64 : ''));
       form.setFieldsValue({ images: fileList });
       return;
     }
 
-    // 如果文件上传成功，转换为Base64
+    // If the file is uploaded successfully, convert it to Base64
     if (file.status === 'done') {
       const base64 = await getBase64(file.originFileObj);
-      file.base64 = base64; // 将Base64编码存储在文件对象中
+      file.base64 = base64;
     }
 
-    // 更新状态和表单值
+    // Update form
     setImagesBase64(fileList.filter(file => file.status === 'done').map(file => file.base64));
     form.setFieldsValue({ images: fileList });
   };
@@ -221,7 +215,6 @@ const EditListing = () => {
             fileList={form.getFieldValue('thumbnail') || []}
             onChange={handleThumbnailChange}
             onRemove={file => {
-              // 在这里处理删除逻辑
               setThumbnailBase64('');
               form.setFieldsValue({
                 thumbnail: form.getFieldValue('thumbnail').filter(f => f.uid !== file.uid),
@@ -249,7 +242,6 @@ const EditListing = () => {
             fileList={form.getFieldValue('images') || []}
             onChange={handleImagesChange}
             onRemove={file => {
-              // 在这里处理删除逻辑
               setThumbnailBase64('');
               form.setFieldsValue({
                 thumbnail: form.getFieldValue('thumbnail').filter(f => f.uid !== file.uid),
@@ -269,7 +261,7 @@ const EditListing = () => {
         </Form.Item>
 
         <Form.Item>
-          <Button type="primary" htmlType="submit">
+          <Button type="primary" htmlType="submit" name='save-button'>
             Save
           </Button>
           <Button onClick={onCancel} style={{ marginLeft: '10px' }}>

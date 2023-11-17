@@ -16,7 +16,7 @@
     margin-bottom: 20px;
   }
 }
-/* 当屏幕宽度小于或等于600px时，适应手机端显示 */
+
 @media (max-width: 600px) {
   .cards-container {
     flex-direction: column;

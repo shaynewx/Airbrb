@@ -4,33 +4,17 @@ import { useNavigate } from 'react-router-dom';
 import TimeSetForm from '../form/TimeSet';
 import { publishListing, deleteListing as deleteListingApi } from '../form/apiService';
 
-// 每个具体的卡片组件都会接收一个包含所有房源信息的对象作为props
+// Each card will receive an object containing all listing information as props
 const Cards = ({ id, title, address, type, beds, bedrooms, bathrooms, amenities, thumbnail, reviews, price, images, owner, postedOn, published, availability }) => {
-  console.log(
-    // 'id:', id,
-    // 'title:', title,
-    // 'address:', address,
-    // 'type:', type,
-    //  'beds:', beds,
-    //  'bedrooms:', bedrooms,
-    //  'bathrooms', bathrooms,
-    //  'amenities:', amenities,
-    //  'thumbnail:', thumbnail,
-    //  'reviews', reviews,
-    //  'price:', price,
-    'owner:', owner,
-    'post time', postedOn,
-    'publish:', published,
-    'availability:', availability)
   const navigate = useNavigate();
 
-  // 检查当前登录用户是否是房源的房东,如果不是房东，不渲染这个房源卡片
+  // Check whether the currently logged in user is the landlord of the property.
+  // If not, the property card will not be rendered.
   const currentUserId = localStorage.getItem('userId');
   const isOwner = owner === currentUserId;
   if (!isOwner) {
     return null;
   }
-  // 定义editListing函数，当点击编辑按钮时触发
   const editListing = () => {
     navigate(`/edit-listing/${id}`, {
       state: {
@@ -41,18 +25,18 @@ const Cards = ({ id, title, address, type, beds, bedrooms, bathrooms, amenities,
         bedrooms,
         bathrooms,
         amenities,
-        thumbnail: thumbnail ? [thumbnail] : [], // 将字符串转换为数组或空数组
+        thumbnail: thumbnail ? [thumbnail] : [], // Convert string to array or empty array
         reviews,
         price,
         images
       }
     });
   };
-  // 确保reviews是数组并且不为空，然后计算平均评分
+  // Make sure reviews is an array and not empty, then calculate the average rating
   const averageRating = reviews && reviews.length > 0
     ? reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length
-    : 0; // 如果reviews未定义或为空数组，平均评分为0
-  const totalReviews = reviews ? reviews.length : 0; // 如果reviews未定义，则评价数量为0
+    : 0;
+  const totalReviews = reviews ? reviews.length : 0;
 
   const [isTimeSetModalOpen, setIsTimeSetModalOpen] = useState(false);
   const [timeSetForm] = Form.useForm();
@@ -68,7 +52,6 @@ const Cards = ({ id, title, address, type, beds, bedrooms, bathrooms, amenities,
         throw new Error('Both start and end dates must be selected.');
       }
 
-      // 正确地构建 availability 数据
       const availabilityData = {
         availability: [
           {
@@ -78,10 +61,8 @@ const Cards = ({ id, title, address, type, beds, bedrooms, bathrooms, amenities,
         ],
       };
 
-      // 传递正确的数据结构到 publishListing 函数
       const response = await publishListing(id, availabilityData);
 
-      // 检查响应状态
       if (response.ok) {
         message.success('Listing published with date range.');
         setIsTimeSetModalOpen(false);
@@ -98,15 +79,14 @@ const Cards = ({ id, title, address, type, beds, bedrooms, bathrooms, amenities,
     setIsTimeSetModalOpen(false);
   };
 
-  // 新增状态控制删除确认模态框的显示
   const [isDeleteConfirmModalOpen, setIsDeleteConfirmModalOpen] = useState(false);
 
-  // 显示删除确认模态框
+  // Show delete confirmation modal box
   const showDeleteConfirmModal = () => {
     setIsDeleteConfirmModalOpen(true);
   };
 
-  // 确认删除操作
+  // confirm delete operation
   const handleDeleteConfirm = async () => {
     const success = await deleteListingApi(id);
     if (success) {
@@ -117,7 +97,6 @@ const Cards = ({ id, title, address, type, beds, bedrooms, bathrooms, amenities,
     setIsDeleteConfirmModalOpen(false);
   };
 
-  // 取消删除操作
   const handleDeleteCancel = () => {
     setIsDeleteConfirmModalOpen(false);
   };
@@ -135,9 +114,9 @@ const Cards = ({ id, title, address, type, beds, bedrooms, bathrooms, amenities,
       <p>Price: ${price} per night</p>
       <Rate disabled defaultValue={averageRating} />
       <p>{totalReviews} reviews</p>
-      <Button type="primary" style={{ margin: '5px' }} onClick={editListing}>Edit</Button>
-      <Button style={{ margin: '5px' }} onClick={showDeleteConfirmModal}>Delete</Button>
-      <Button style={{ margin: '5px' }} onClick={showTimeSetModal}>Publish</Button>
+      <Button type="primary" style={{ margin: '5px' }} onClick={editListing} name='edit-button'>Edit</Button>
+      <Button style={{ margin: '5px' }} onClick={showDeleteConfirmModal} name='delete-button'>Delete</Button>
+      <Button style={{ margin: '5px' }} onClick={showTimeSetModal} name='publish-button'>Publish</Button>
       <Modal
         title="Set Availability"
         open={isTimeSetModalOpen}

@@ -1,26 +1,33 @@
 import React, { useEffect, useState } from 'react';
 import Cards from '../card/PublishCards';
 import { getListing, getListingById } from '../form/apiService';
+import SearchFilter from '../filter/SearchFilter';
 import '../style/card.css';
 import '../style/style.css';
 
 function PublishedListings () {
+  const [allListings, setAllListings] = useState([]);
   const [publishedListings, setPublishedListings] = useState([]);
+  const [searchText, setSearchText] = useState('');
+  const [bedroomRange, setBedroomRange] = useState([1, 5]);
+  const [dateRange, setDateRange] = useState([]);
+  const [priceRange, setPriceRange] = useState([0, 10000]);
+  const [reviewRange, setReviewRange] = useState([1, 5]);
+  const [sortOrder, setSortOrder] = useState('asc');
 
   useEffect(() => {
     const fetchPublishedListings = async () => {
       try {
         const initialData = await getListing();
-
         if (initialData && initialData.listings) {
-          // 使用 Promise.all 来并发获取所有房源的详细信息
+          // fetch all information
           const allListingsDetails = await Promise.all(
             initialData.listings.map(async (listing) => {
               const detailedData = await getListingById(listing.id);
               return { ...detailedData, id: listing.id };
             })
           );
-          // 过滤出已发布的房源
+          // Filter out published properties and sort by name
           const filteredPublishedListings = allListingsDetails
             .filter(listing => listing.listing.published)
             .sort((a, b) => {
@@ -34,8 +41,9 @@ function PublishedListings () {
               }
               return 0;
             });
-          console.log('Filter published listings:', filteredPublishedListings); // 检查过滤后的已发布房源
+          setAllListings(filteredPublishedListings);
           setPublishedListings(filteredPublishedListings);
+          console.log('Filter published listings:', filteredPublishedListings);
         }
       } catch (error) {
         console.error('Error fetching published listings:', error);
@@ -45,9 +53,35 @@ function PublishedListings () {
     fetchPublishedListings();
   }, []);
 
+  // TODO:handle search
+  const handleSearch = () => {
+    const filteredResults = allListings.filter(item => {
+      const matchesTitleOrAddress = item.listing.title.toLowerCase().includes(searchText.toLowerCase()) || item.listing.address.toLowerCase().includes(searchText.toLowerCase());
+      const matchesBedrooms = item.listing.metadata.bedrooms >= bedroomRange[0] && item.listing.metadata.bedrooms <= bedroomRange[1];
+      return matchesTitleOrAddress && matchesBedrooms;
+    });
+
+    setPublishedListings(filteredResults);
+  };
+
   return (
     <div>
       <h2>All Listings</h2>
+      <SearchFilter
+        searchText={searchText}
+        setSearchText={setSearchText}
+        bedroomRange={bedroomRange}
+        setBedroomRange={setBedroomRange}
+        dateRange={dateRange}
+        setDateRange={setDateRange}
+        priceRange={priceRange}
+        setPriceRange={setPriceRange}
+        reviewRange={reviewRange}
+        setReviewRange={setReviewRange}
+        sortOrder={sortOrder}
+        setSortOrder={setSortOrder}
+        onSearch={handleSearch}
+      />
       <div className='cards-container'>
         {publishedListings.map((item) => {
           const { listing } = item;

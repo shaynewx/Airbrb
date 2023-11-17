@@ -13,14 +13,12 @@ const getBase64 = (file, callback) => {
 };
 
 const FormDisabledDemo = ({ form, setThumbnailBase64, setImagesBase64 }) => {
-  // 上传图片，将缩略图转化为base64编码
   const handleThumbnailChange = info => {
     if (info.file.status === 'uploading' || info.file.status === 'done') {
       getBase64(info.file.originFileObj, setThumbnailBase64);
     }
     return info.fileList;
   };
-  // 上传images
   const handleImagesChange = info => {
     // convert the rest images to base64
     const newImages = info.fileList.filter(file => !!file.originFileObj);
@@ -80,7 +78,7 @@ const FormDisabledDemo = ({ form, setThumbnailBase64, setImagesBase64 }) => {
         name="thumbnail"
         valuePropName="fileList"
         getValueFromEvent={handleThumbnailChange}
-        rules={[{ required: true, message: 'Please upload a thumbnail!' }]}
+        // rules={[{ required: true, message: 'Please upload a thumbnail!' }]}
       >
         <Upload
           name="thumbnail"

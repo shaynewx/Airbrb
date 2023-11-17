@@ -19,7 +19,7 @@ function LoginResult () {
         status="success"
         title="Successfully Log in to Airbrb!"
         extra={[
-          <Button type="primary" key="hosted-listings" onClick={jumpToHostedListing}>
+          <Button name='view-hosted-listings' type="primary" key="hosted-listings" onClick={jumpToHostedListing}>
             View Hosted Listings
             </Button>,
           <Button type="primary" key="all-listings" onClick={jumpToAllListing}>

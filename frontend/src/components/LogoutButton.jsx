@@ -10,16 +10,16 @@ const LogoutButton = () => {
     const result = await logoutUser();
     if (result.success) {
       message.success('Logged out successfully');
-      localStorage.removeItem('token'); // 清除本地存储的令牌
-      localStorage.removeItem('userId'); // 清除本地存储的用户ID
-      navigate('/'); // 重定向到首页或登录页面
+      localStorage.removeItem('token');
+      localStorage.removeItem('userId');
+      navigate('/');
     } else {
       message.error(result.error || 'Logout failed. Please try again.');
     }
   };
 
   return (
-    <Button onClick={handleLogout} style={{ margin: '10px' }}>
+    <Button onClick={handleLogout} style={{ margin: '10px' }} name='logout-button'>
       Logout
     </Button>
   );

@@ -3,8 +3,6 @@ import { Button, Checkbox, Form, Input, message } from 'antd';
 import { useNavigate, Link } from 'react-router-dom';
 import { loginUser } from './apiService';
 
-// const LOGIN_API_URL = 'http://localhost:5005/user/auth/login';
-
 const LoginForm = () => {
   const navigate = useNavigate();
 
@@ -26,6 +24,9 @@ const LoginForm = () => {
 
   const onFinishFailed = (errorInfo) => {
     console.log('Failed:', errorInfo);
+  };
+  const jumpToHome = () => {
+    navigate('/');
   };
 
   return (
@@ -101,7 +102,7 @@ const LoginForm = () => {
       <Button type="primary" htmlType="submit" style={{ margin: '5px' }}>
         Submit
       </Button>
-      <Button style={{ margin: '5px' }} >
+      <Button style={{ margin: '5px' }} onClick={jumpToHome}>
         Cancel
       </Button>
     </Form.Item>

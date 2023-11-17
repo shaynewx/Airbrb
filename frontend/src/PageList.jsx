@@ -1,5 +1,5 @@
 import React from 'react';
-import { Routes, Route, Link } from 'react-router-dom';
+import { Routes, Route } from 'react-router-dom';
 import Home from './components/Home';
 import Register from './components/Register';
 import Login from './components/Login';
@@ -7,6 +7,8 @@ import Dashboard from './components/LoginResult';
 import HostedListing from './components/HostedListing';
 import AllListing from './components/AllListing';
 import EditListing from './components/listing/EditListing';
+import PublishedListings from './components/listing/PublishedListing';
+import ListingDetails from './components/listing/ListingDetails';
 
 function PageList () {
   const [token, setToken] = React.useState(null);
@@ -14,7 +16,8 @@ function PageList () {
   return (
     <div>
       <h1>Airbrb</h1>
-      <nav>
+      <h3>Welcome!</h3>
+      {/* <nav>
         <Link to="/">Home</Link>
         &nbsp;|&nbsp;
         <Link to="/register">Register</Link>
@@ -26,7 +29,7 @@ function PageList () {
         <Link to="/hosted-listing">Hosted Listing</Link>
         &nbsp;|&nbsp;
         <Link to="/all-listing">All Listing</Link>
-      </nav>
+      </nav> */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register token={token} setToken={setToken} />} />
@@ -35,6 +38,8 @@ function PageList () {
         <Route path="/hosted-listing" element={<HostedListing token={token} />} />
         <Route path="/all-listing" element={<AllListing token={token} />} />
         <Route path="/edit-listing/:id" element={<EditListing />} />
+        <Route path="/published-listings" element={<PublishedListings />} />
+        <Route path="/listing/:id" element={<ListingDetails />} />
       </Routes>
     </div>
   );

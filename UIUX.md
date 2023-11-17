@@ -1,3 +1,3 @@
-1.移动端布局？
+1. Adapt to mobile layout
 
-2.
+2. When deleting a room, the user is prompted twice to confirm the deletion

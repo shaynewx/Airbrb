@@ -1,4 +1,3 @@
-// CreateNewListing.jsx
 import React, { useState } from 'react';
 import { Button, Modal, Form, message } from 'antd';
 import FormDisabledDemo from './ListingForm';
@@ -36,7 +35,8 @@ const CreateNewListing = ({ onListingCreated }) => {
         setThumbnailBase64('');
         setImagesBase64([]);
         form.resetFields();
-        onListingCreated(); // 调用传入的更新房源列表的函数
+        // Call the function passed in to update the property list
+        onListingCreated();
       } else {
         message.error(response.error || 'An error occurred while creating the listing');
       }
@@ -62,7 +62,7 @@ const CreateNewListing = ({ onListingCreated }) => {
 
   return (
     <>
-      <Button type="primary" onClick={showModal}>
+      <Button type="primary" name='create-new-listing' onClick={showModal}>
         Create a New Listing
       </Button>
       <Modal title="Create a New Listing" open={isModalOpen} onOk={handleOk} onCancel={handleCancel}>

@@ -6,21 +6,20 @@ const post = async (url, method, data = null, authed = false) => {
     method,
     headers: {
       'Content-Type': 'application/json',
-      // 如果需要认证，则添加Authorization头
+      // If authentication is required
       ...(authed && { Authorization: `Bearer ${localStorage.getItem('token')}` }),
     },
-    // 如果有数据传入，就添加body属性
+    // If there is data to transmit
     ...(data && { body: JSON.stringify(data) }),
   };
 
   const response = await fetch(url, config);
 
-  // 对于注销请求，因为可能不返回JSON，所以需要特别处理
+  // When response nothing
   if (method === 'POST' && url.endsWith('/logout')) {
     return response.ok ? { success: true } : { success: false, error: 'Logout failed' };
   }
 
-  // 尝试解析JSON，如果失败则返回null
   try {
     return await response.json();
   } catch (error) {
@@ -30,7 +29,7 @@ const post = async (url, method, data = null, authed = false) => {
 
 // 2.get function
 const get = async (url, authed = false, listingid = null) => {
-  // 构建完整的URL，如果提供了listingid，将其作为查询参数添加
+  // If listingid is provided, add it as a query parameter
   const fullUrl = new URL(url);
   if (listingid) {
     fullUrl.searchParams.append('listingid', listingid);
@@ -40,7 +39,6 @@ const get = async (url, authed = false, listingid = null) => {
     method: 'GET',
     headers: {
       'Content-Type': 'application/json',
-      // 如果需要认证，则添加Authorization头
       ...(authed && { Authorization: `Bearer ${localStorage.getItem('token')}` }),
     },
   };
@@ -123,7 +121,6 @@ export const publishListing = async (listingId, availabilityData) => {
     });
     return response.ok;
   } catch (error) {
-    // 如果有错误，打印错误并重新抛出，以便调用者可以处理它
     console.error('Cannot publish the listing:', error);
     throw error;
   }
@@ -140,12 +137,11 @@ export const deleteListing = async (listingId) => {
       },
     });
     if (!response.ok) {
-      // 如果响应状态不是2xx，则抛出错误
       throw new Error('Failed to delete the listing.');
     }
-    return true; // 如果响应状态是2xx，返回true
+    return true;
   } catch (error) {
     console.error('Cannot delete the listing:', error);
-    return false; // 如果捕获到错误，返回false
+    return false;
   }
 };

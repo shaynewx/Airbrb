@@ -33,8 +33,7 @@ const Cards = () => (
     </Carousel>
     }
   >
-    {/* //TODO: */}
-    <p>房源信息</p>
+    <p>Listing Information</p>
   </Card>
 );
 export default Cards;

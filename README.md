@@ -1,6 +1,6 @@
-# AirBrB - React and Ant Design Project
+# Airbrb - React and Ant Design Project
 
-This project, AirBrB, is a React-based application that mimics the core functionalities of Airbnb, focusing on property rental services. It utilizes the Ant Design library for UI components, ensuring a sleek and modern user interface.
+This project, Airbrb, is a React-based application that mimics the core functionalities of Airbnb, focusing on property rental services. It utilizes the Ant Design library for UI components, ensuring a sleek and modern user interface.
 
 ## Features
 

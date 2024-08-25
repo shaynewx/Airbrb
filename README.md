@@ -29,7 +29,7 @@ This project, AirBrB, is a React-based application that mimics the core function
 
 1. Clone the repository:
    ```sh
-   git clone <repository-url>
+   git clone git@github.com:shaynewx/Airbrb.git
    ```
 
 2. Install dependencies:

@@ -3,7 +3,8 @@
     "version": "1.0.0",
     "private": true,
     "scripts": {
-      "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend",
+      "heroku-postbuild": "npm install --prefix backend && NPM_CONFIG_PRODUCTION=false npm install --prefix frontend && npm run build --prefix frontend",
+
       "start": "node backend/src/server.js"
     },
     "engines": {

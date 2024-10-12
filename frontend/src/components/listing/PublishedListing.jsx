@@ -18,32 +18,39 @@ function PublishedListings () {
   useEffect(() => {
     const fetchPublishedListings = async () => {
       try {
+        // Fetch basic listing data
         const initialData = await getListing();
+        console.log('Initial data:', initialData); // Log API response to ensure correct data structure
+
         if (initialData && initialData.listings) {
-          // fetch all information
+          // Fetch detailed information for each listing
           const allListingsDetails = await Promise.all(
             initialData.listings.map(async (listing) => {
-              const detailedData = await getListingById(listing.id);
-              return { ...detailedData, id: listing.id };
+              try {
+                const detailedData = await getListingById(listing.id);
+                return { ...detailedData, id: listing.id };
+              } catch (error) {
+                console.error(`Error fetching details for listing ${listing.id}:`, error);
+                return null; // Handle errors for individual listings
+              }
             })
           );
-          // Filter out published properties and sort by name
-          const filteredPublishedListings = allListingsDetails
-            .filter(listing => listing.listing.published)
+
+          // Filter out any listings that failed to load
+          const validListings = allListingsDetails.filter(listing => listing !== null);
+
+          // Filter out published listings and sort them by title
+          const filteredPublishedListings = validListings
+            .filter(listing => listing.listing && listing.listing.published)
             .sort((a, b) => {
               const titleA = a.listing.title.toUpperCase();
               const titleB = b.listing.title.toUpperCase();
-              if (titleA < titleB) {
-                return -1;
-              }
-              if (titleA > titleB) {
-                return 1;
-              }
-              return 0;
+              return titleA < titleB ? -1 : titleA > titleB ? 1 : 0;
             });
+
           setAllListings(filteredPublishedListings);
           setPublishedListings(filteredPublishedListings);
-          console.log('Filter published listings:', filteredPublishedListings);
+          console.log('Filtered published listings:', filteredPublishedListings); // Log filtered listings
         }
       } catch (error) {
         console.error('Error fetching published listings:', error);
@@ -53,7 +60,6 @@ function PublishedListings () {
     fetchPublishedListings();
   }, []);
 
-  // TODO:handle search
   const handleSearch = () => {
     const filteredResults = allListings.filter(item => {
       const matchesTitleOrAddress = item.listing.title.toLowerCase().includes(searchText.toLowerCase()) || item.listing.address.toLowerCase().includes(searchText.toLowerCase());
@@ -87,23 +93,23 @@ function PublishedListings () {
           const { listing } = item;
           return (
             <Cards
-            key={item.id}
-            id={item.id}
-            title={listing.title}
-            owner={listing.owner}
-            address={listing.address}
-            price={listing.price}
-            thumbnail={listing.thumbnail}
-            availability={listing.availability}
-            type={listing.metadata?.type}
-            bathrooms={listing.metadata?.bathrooms}
-            beds={listing.metadata?.beds}
-            bedrooms={listing.metadata?.bedrooms}
-            amenities={listing.metadata?.amenities}
-            images={listing.metadata?.images}
-            reviews={listing.reviews}
-            published={listing.published}
-            postedOn={listing.postedOn}
+              key={item.id}
+              id={item.id}
+              title={listing.title}
+              owner={listing.owner}
+              address={listing.address}
+              price={listing.price}
+              thumbnail={listing.thumbnail}
+              availability={listing.availability}
+              type={listing.metadata?.type}
+              bathrooms={listing.metadata?.bathrooms}
+              beds={listing.metadata?.beds}
+              bedrooms={listing.metadata?.bedrooms}
+              amenities={listing.metadata?.amenities}
+              images={listing.metadata?.images}
+              reviews={listing.reviews}
+              published={listing.published}
+              postedOn={listing.postedOn}
             />
           );
         })}

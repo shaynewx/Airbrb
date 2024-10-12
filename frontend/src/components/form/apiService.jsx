@@ -6,30 +6,26 @@ const post = async (url, method, data = null, authed = false) => {
     method,
     headers: {
       'Content-Type': 'application/json',
-      // If authentication is required
       ...(authed && { Authorization: `Bearer ${localStorage.getItem('token')}` }),
     },
-    // If there is data to transmit
     ...(data && { body: JSON.stringify(data) }),
   };
 
-  const response = await fetch(url, config);
-
-  // When response nothing
-  if (method === 'POST' && url.endsWith('/logout')) {
-    return response.ok ? { success: true } : { success: false, error: 'Logout failed' };
-  }
-
   try {
+    const response = await fetch(url, config);
+    if (!response.ok) {
+      const errorData = await response.json();
+      throw new Error(errorData.message || `Request failed with status ${response.status}`);
+    }
     return await response.json();
   } catch (error) {
-    return response.ok ? {} : null;
+    console.error(`Error in POST request to ${url}:`, error);
+    throw error;  // 抛出错误，供上层捕获处理
   }
 };
 
 // 2.get function
 const get = async (url, authed = false, listingid = null) => {
-  // If listingid is provided, add it as a query parameter
   const fullUrl = new URL(url);
   if (listingid) {
     fullUrl.searchParams.append('listingid', listingid);
@@ -46,12 +42,13 @@ const get = async (url, authed = false, listingid = null) => {
   try {
     const response = await fetch(fullUrl, config);
     if (!response.ok) {
-      throw new Error(`HTTP error! status: ${response.status}`);
+      const errorData = await response.json();
+      throw new Error(errorData.message || `Request failed with status ${response.status}`);
     }
     return await response.json();
   } catch (error) {
-    console.error('There was a problem with the fetch operation: ' + error.message);
-    return null;
+    console.error(`Error in GET request to ${url}:`, error);
+    throw error;
   }
 };
 
@@ -84,7 +81,7 @@ export const getListing = () => {
 
 // getListingById request
 export const getListingById = (listingId) => {
-  return get(`${BASE_URL}/listings/${listingId}`);
+  return get(`${BASE_URL}/listings/${listingId}`, true);  // authed = true
 };
 
 // update listing request

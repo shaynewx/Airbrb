@@ -6,7 +6,7 @@
   "scripts": {
     "test": "jest test/*",
     "lint": "eslint src/*.js",
-    "start": "nodemon -r esm src/server.js --ignore database.json",
+    "start": "node -r esm src/server.js",
     "reset": "npx rimraf database.json"
   },
   "author": "",
@@ -24,6 +24,7 @@
     "swagger-ui-express": "^4.1.4"
   },
   "devDependencies": {
+    "nodemon": "^2.0.6",
     "@babel/preset-env": "^7.12.1",
     "babel-cli": "^6.26.0",
     "babel-core": "^6.26.3",

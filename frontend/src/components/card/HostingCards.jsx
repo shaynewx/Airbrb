@@ -4,17 +4,16 @@ import { useNavigate } from 'react-router-dom';
 import TimeSetForm from '../form/TimeSet';
 import { publishListing, deleteListing as deleteListingApi } from '../form/apiService';
 
-// Each card will receive an object containing all listing information as props
 const Cards = ({ id, title, address, type, beds, bedrooms, bathrooms, amenities, thumbnail, reviews, price, images, owner, postedOn, published, availability }) => {
   const navigate = useNavigate();
-
-  // Check whether the currently logged in user is the landlord of the property.
-  // If not, the property card will not be rendered.
   const currentUserId = localStorage.getItem('userId');
   const isOwner = owner === currentUserId;
-  if (!isOwner) {
-    return null;
-  }
+
+  // 把 Hooks 调用放到条件逻辑之前
+  const [isTimeSetModalOpen, setIsTimeSetModalOpen] = useState(false);
+  const [timeSetForm] = Form.useForm();
+  const [isDeleteConfirmModalOpen, setIsDeleteConfirmModalOpen] = useState(false);
+
   const editListing = () => {
     navigate(`/edit-listing/${id}`, {
       state: {
@@ -32,14 +31,6 @@ const Cards = ({ id, title, address, type, beds, bedrooms, bathrooms, amenities,
       }
     });
   };
-  // Make sure reviews is an array and not empty, then calculate the average rating
-  const averageRating = reviews && reviews.length > 0
-    ? reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length
-    : 0;
-  const totalReviews = reviews ? reviews.length : 0;
-
-  const [isTimeSetModalOpen, setIsTimeSetModalOpen] = useState(false);
-  const [timeSetForm] = Form.useForm();
 
   const showTimeSetModal = () => {
     setIsTimeSetModalOpen(true);
@@ -79,14 +70,10 @@ const Cards = ({ id, title, address, type, beds, bedrooms, bathrooms, amenities,
     setIsTimeSetModalOpen(false);
   };
 
-  const [isDeleteConfirmModalOpen, setIsDeleteConfirmModalOpen] = useState(false);
-
-  // Show delete confirmation modal box
   const showDeleteConfirmModal = () => {
     setIsDeleteConfirmModalOpen(true);
   };
 
-  // confirm delete operation
   const handleDeleteConfirm = async () => {
     const success = await deleteListingApi(id);
     if (success) {
@@ -100,6 +87,16 @@ const Cards = ({ id, title, address, type, beds, bedrooms, bathrooms, amenities,
   const handleDeleteCancel = () => {
     setIsDeleteConfirmModalOpen(false);
   };
+
+  // 将条件逻辑放到渲染部分
+  if (!isOwner) {
+    return null;
+  }
+
+  const averageRating = reviews && reviews.length > 0
+    ? reviews.reduce((acc, review) => acc + review.rating, 0) / reviews.length
+    : 0;
+  const totalReviews = reviews ? reviews.length : 0;
 
   return (
     <Card

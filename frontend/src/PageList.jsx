@@ -17,19 +17,6 @@ function PageList () {
     <div>
       <h1>Airbrb</h1>
       <h3>Welcome!</h3>
-      {/* <nav>
-        <Link to="/">Home</Link>
-        &nbsp;|&nbsp;
-        <Link to="/register">Register</Link>
-        &nbsp;|&nbsp;
-        <Link to="/login">Login</Link>
-        &nbsp;|&nbsp;
-        <Link to="/login-result">Login Result</Link>
-        &nbsp;|&nbsp;
-        <Link to="/hosted-listing">Hosted Listing</Link>
-        &nbsp;|&nbsp;
-        <Link to="/all-listing">All Listing</Link>
-      </nav> */}
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/register" element={<Register token={token} setToken={setToken} />} />

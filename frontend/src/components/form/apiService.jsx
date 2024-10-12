@@ -1,4 +1,4 @@
-const BASE_URL = 'http://localhost:5005';
+const BASE_URL = process.env.REACT_APP_API_BASE_URL || 'https://airbrb-shayne-2d6f81fc9a3b.herokuapp.com';
 
 // 1.post function
 const post = async (url, method, data = null, authed = false) => {

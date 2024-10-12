@@ -119,12 +119,20 @@ export const publishListing = async (listingId, availabilityData) => {
       },
       body: JSON.stringify(availabilityData),
     });
-    return response.ok;
+
+    // 检查响应状态，如果不是 OK，抛出错误
+    if (!response.ok) {
+      throw new Error(`Failed to publish listing with status: ${response.status}`);
+    }
+
+    // 返回完整的 response 对象
+    return response;
   } catch (error) {
     console.error('Cannot publish the listing:', error);
     throw error;
   }
 };
+
 
 // delete listing request
 export const deleteListing = async (listingId) => {

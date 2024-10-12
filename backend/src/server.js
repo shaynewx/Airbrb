@@ -8,6 +8,7 @@ import morgan from 'morgan';
 import { InputError, AccessError } from './error.js';
 import swaggerDocument from '../swagger.json' assert { type: 'json' };
 
+
 import {
   getEmailFromAuthorization,
   login,

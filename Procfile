@@ -1,1 +1,1 @@
-web: npm run build && npx serve -s build
+web: node --max-old-space-size=512 backend/src/server.js

@@ -15,7 +15,7 @@
   },
   "scripts": {
     "start": "react-scripts start",
-    "build": "react-scripts build",
+    "build": "EXTEND_ESLINT=false react-scripts build",
     "test": "react-scripts test",
     "cypress": "cypress open",
     "lint": "eslint src --ext .js,.jsx,.ts,.tsx",

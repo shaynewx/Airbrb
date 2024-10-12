@@ -4,6 +4,7 @@ import swaggerUi from 'swagger-ui-express';
 import bodyParser from 'body-parser';
 import cors from 'cors';
 import morgan from 'morgan';
+import path from 'path';
 
 import { InputError, AccessError } from './error.js';
 import swaggerDocument from '../swagger.json' assert { type: 'json' };
@@ -257,11 +258,20 @@ app.put(
                        Running Server
 ***************************************************************/
 
-app.get('/', (req, res) => res.redirect('/docs'));
+// app.get('/', (req, res) => res.redirect('/docs'));
 
+// Keep Swagger API docs at /docs
 app.use('/docs', swaggerUi.serve, swaggerUi.setup(swaggerDocument));
 
-// const configData = JSON.parse(fs.readFileSync('../frontend/src/config.json'));
+// Serve static files from the React frontend app
+app.use(express.static(path.join(__dirname, '../../frontend/build')));
+
+// Route all other requests to the React frontend
+app.get('*', (req, res) => {
+  res.sendFile(path.join(__dirname, '../../frontend/build', 'index.html'));
+});
+
+
 const port = process.env.PORT || process.env.BACKEND_PORT || 5033;
 
 const server = app.listen(port, () => {
